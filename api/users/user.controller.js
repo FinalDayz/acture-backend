@@ -108,12 +108,12 @@ module.exports = {
             if (!results) {
                 return res.json({
                     success: 0,
-                    data: "email not found"
+                    data: "Invalid email or password"
                 });
             }
             const result = compareSync(body.password, results.password);
             if (result) {
-                results.password = undefined;
+                results.password = undefined; // Don't send passwords unnecessarily
                 const jsontoken = sign({ result: results }, process.env.JWT_KEY, {
                     expiresIn: "1h"
                 });
@@ -126,7 +126,7 @@ module.exports = {
             else {
                 return res.json({
                     success: 0,
-                    data: "Invalid password"
+                    data: "Invalid email or password"
                 });
             }
         });
