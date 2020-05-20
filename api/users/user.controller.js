@@ -1,4 +1,5 @@
-const { create, getUserById, getUsers, updateUser, deleteUser, getUserByEmail } = require("./user.service");
+const {setUserActive} = require("./user.service");
+const { create, getUserById, getUsers, updateUser, deleteUser, getUserByEmail, fetchInactiveUsers } = require("./user.service");
 
 const { genSaltSync, hashSync, compareSync} = require("bcrypt");
 
@@ -21,6 +22,33 @@ module.exports = {
                 success: 1,
                 data: results
             })
+        });
+    },
+
+    activateUser: (req, res) => {
+        console.log(req.params);
+        const id = req.params.id;
+        setUserActive(id, (err, results) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            return res.json({
+                success: 1
+            });
+        });
+    },
+
+    getInactiveUsers: (req, res) => {
+        fetchInactiveUsers((err, results) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            return res.json({
+                success: 1,
+                data: results
+            });
         });
     },
 
