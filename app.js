@@ -1,6 +1,7 @@
 // const createError = require('http-errors');
 require("dotenv").config();
 const express = require('express');
+
 // const path = require('path');
 // var cookieParser = require('cookie-parser');
 // var logger = require('morgan');
@@ -51,3 +52,4 @@ app.use("/api/users", userRouter);
 app.listen(process.env.APP_PORT, () => {
   console.log("Server up and running on PORT : ", process.env.APP_PORT);
 });
+
