@@ -10,8 +10,8 @@ router.get("/byid/:id", checkToken, checkRole('user'), getUserById);
 router.patch("/", checkToken, updateUsers);
 router.delete("/", checkToken, deleteUser);
 
-router.get("/inactiveUsers", checkToken, getInactiveUsers);
-router.patch("/activateUser/:id", checkToken, activateUser);
+router.get("/inactiveUsers", checkToken, checkRole('admin'), getInactiveUsers);
+router.patch("/activateUser/:id", checkToken, checkRole('admin'), activateUser);
 
 router.post("/login", login);
 
