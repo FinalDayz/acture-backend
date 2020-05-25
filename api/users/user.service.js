@@ -43,7 +43,7 @@ module.exports = {
         pool.query(
             `SELECT
             userId, firstname, tussenvoegsel, register_date, lastname,
-            image, register_date, role, email, activated
+            TO_BASE64(image) image, register_date, role, email, activated
             FROM Account
             WHERE activated <> 1 OR activated IS NULL`,
             [],
@@ -118,7 +118,9 @@ module.exports = {
 
     getUserByEmail: (email, callback) => {
         pool.query(
-            `select * from Account where email = ?`,
+            `select firstname, lastname, userId, address, tussenvoegsel, register_date, 
+            unregister_date, password, role, email, telephone, description, activated 
+            from Account where email = ?`,
             [email],
             (error, results, fields) => {
                 if (error) {
