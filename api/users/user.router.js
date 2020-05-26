@@ -14,5 +14,4 @@ router.patch("/activateUser/:id", checkToken, activateUser);
 router.post("/login", login);
 
 
-
 module.exports = router;

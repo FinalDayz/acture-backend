@@ -6,7 +6,7 @@ module.exports = {
         next();
         // if (token) {
         //     token = token.slice(7);
-        //     verify(token, process..env.JWT_KEY, (err, decoded) => {
+        //     verify(token, process...env.JWT_KEY, (err, decoded) => {
         //         if (err) {
         //             res.json({
         //                 success: 0,
