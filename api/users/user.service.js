@@ -75,7 +75,7 @@ module.exports = {
             [id],
             (error, results, fields) => {
                 if (error) {
-                    callback(error);
+                    return callback(error);
                 }
                 return callback(null, results[0]);
             }
@@ -96,7 +96,7 @@ module.exports = {
             ],
             (error, results, fields) => {
                 if (error) {
-                    callback(error);
+                    return callback(error);
                 }
                 return callback(null, results[0]);
             }
@@ -122,7 +122,7 @@ module.exports = {
             [email],
             (error, results, fields) => {
                 if (error) {
-                    callback(error);
+                    return callback(error);
                 }
                 return callback(null, results[0]);
             }
