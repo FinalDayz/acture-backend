@@ -33,6 +33,23 @@ module.exports = {
         )
     },
 
+    getOnlyNews: (callback) => {
+        pool.query(
+            'SELECT DISTINCT *' +
+            ' FROM Post' +
+            ' WHERE userId=1', //vervang '1' door ID van Lugus
+            [],
+            (error, results, fields) => {
+                if (error) {
+                    return callback(error)
+                }
+                return callback(null, results);
+            }
+        )
+
+
+    },
+
     // getNewsPosts: callback => {
     //     pool.query(
     //         'select * from posts where userId=1 order by postDate desc',

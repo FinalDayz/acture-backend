@@ -24,5 +24,10 @@ module.exports = {
                 message: "Access denied: unauthorized user"
             });
         }
+    },
+
+    getRoleFromToken: (token) => {
+        token = token.slice(7);
+        return decode(token).result.role;
     }
 };
