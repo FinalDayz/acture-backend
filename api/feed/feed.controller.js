@@ -2,6 +2,7 @@ const {insertPost} = require("./feed.service");
 
 module.exports = {
     addPost:(req,res) => {
+        console.log("got to backend")
         const body = req.body;
         insertPost(body, (err, results) => {
             if (err) {

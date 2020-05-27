@@ -1,14 +1,21 @@
 const pool = require("../../config/database");
 
+
 module.exports = {
     insertPost: (data, callback) => {
         pool.query(
-            `insert into Post(text, image,title)
-                values(?, ?, ?)`,
+            // `insert into Post(text, image, userId, postDate, categoriId, title)
+            //     values(?, ?, ?)`,
+            `insert into Post(text, FROM_BASE64(image), userId, categoryId, title)
+                values(?, ?, ?, ?, ?)`,
             [
                 data.text,
                 data.image,
+                // data.postDate,
+                data.userId,
+                data.categoryId,
                 data.title,
+
             ],
             (error, results, fields) => {
                 if (error) {
