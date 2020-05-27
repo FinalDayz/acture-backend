@@ -58,7 +58,7 @@ module.exports = {
 
     getUsers: callback => {
         pool.query(
-            `select userId, firstname, lastname, password, role, email from Account`,
+            `select userId, firstname, lastname, password, role, email, TO_BASE64(image) from Account`,
             [],
             (error, results, fields) => {
                 if (error) {
@@ -80,6 +80,19 @@ module.exports = {
                 return callback(null, results[0]);
             }
         )
+    },
+
+    updateRole: (id, newRole, callback) => {
+        pool.query(
+            `update Account set role=? where userId = ?`,
+            [newRole, id],
+            (error, results, fields) => {
+                if (error) {
+                    return callback(error);
+                }
+                return callback(null, results[0]);
+            }
+        );
     },
 
     updateUser: (data, callback) => {
@@ -105,7 +118,10 @@ module.exports = {
 
     deleteUser: (data, callback) => {
         pool.query(
-            `delete from Account where userId = ?`,
+            `UPDATE 'Account' SET 
+                'address'='','unregister_date'=NOW(),'email'='','image'=null,
+                'telephone'=null,'description'=null,'activated'=0, 'password'=null
+                WHERE 'userId' = ?`,
             [data.id],
             (error, results, fields) => {
                 if (error) {

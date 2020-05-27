@@ -1,4 +1,4 @@
-const { createUser, getUserById, getUsers, updateUsers, deleteUser, login, getInactiveUsers, activateUser } = require("./user.controller");
+const { createUser, getUserById, getUsers, updateUsers, deleteUser, login, getInactiveUsers, activateUser, changeRole } = require("./user.controller");
 const router = require("express").Router();
 
 const { checkToken } = require("../../auth/token_validation");
@@ -12,6 +12,8 @@ router.delete("/", checkToken, deleteUser);
 
 router.get("/inactiveUsers", checkToken, checkRole('admin'), getInactiveUsers);
 router.patch("/activateUser/:id", checkToken, checkRole('admin'), activateUser);
+
+router.post("/changeRole/:id/:newRole", checkToken, checkRole('admin'), changeRole);
 
 router.post("/login", login);
 
