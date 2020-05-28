@@ -4,18 +4,15 @@ const pool = require("../../config/database");
 module.exports = {
     insertPost: (data, callback) => {
         pool.query(
-            // `insert into Post(text, image, userId, postDate, categoriId, title)
-            //     values(?, ?, ?)`,
-            `insert into Post(text, FROM_BASE64(image), userId, categoryId, title)
-                values(?, ?, ?, ?, ?)`,
+            `insert into Post(text, userId, postDate, categoryId, title)
+                values(?, ?,now(),?,?)`,
+            // `insert into Post(text, FROM_BASE64(image) image, userId, categoryId, title)
+            //     values(?, ?, ?, ?, ?)`,
             [
                 data.text,
-                data.image,
-                // data.postDate,
                 data.userId,
                 data.categoryId,
                 data.title,
-
             ],
             (error, results, fields) => {
                 if (error) {
@@ -25,6 +22,19 @@ module.exports = {
             }
         )
 },
+
+    getCategories: callback => {
+        pool.query(
+            `select * from Category`,
+            [],
+            (error, results, fields) => {
+                if (error) {
+                    return callback(error);
+                }
+                return callback(null, results);
+            }
+        )
+    },
 
 
     create: (data, callback) => {

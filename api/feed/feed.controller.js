@@ -1,4 +1,5 @@
 const {insertPost} = require("./feed.service");
+const{getCategories} = require("./feed.service");
 
 module.exports = {
     addPost:(req,res) => {
@@ -19,24 +20,17 @@ module.exports = {
         });
     },
 
-    createUser: (req, res) => {
-
-
-        const body = req.body;
-        const salt = genSaltSync(10);
-        body.password = hashSync(body.password, salt);
-        create(body, (err, results) => {
+    getCategories: (req, res) => {
+        getCategories((err, results) => {
             if (err) {
                 console.log(err);
-                return res.status(500).json({
-                    success: 0,
-                    message: "Database connection error"
-                });
+                return;
             }
-            return res.status(200).json({
+            return res.json({
                 success: 1,
                 data: results
-            })
+            });
         });
     }
-};
+
+}
