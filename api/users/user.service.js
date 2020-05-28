@@ -3,11 +3,12 @@ const pool = require("../../config/database");
 module.exports = {
     create: (data, callback) => {
         pool.query(
-            `insert into Account(firstname, lastname, register_date, password, role, email)
-                values(?, ?, ?, ?, ?, ?)`,
+            `insert into Account(firstname, tussenvoegsel, lastname, register_date, password, role, email)
+                values(?, ?, ?, ?, ?, ?, ?)`,
             [
-                data.first_name,
-                data.last_name,
+                data.firstname,
+                data.tussenvoegsel,
+                data.lastname,
                 data.register_date,
                 data.password,
                 data.role,
