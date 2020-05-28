@@ -1,5 +1,5 @@
 const {setUserActive} = require("./user.service");
-const { create, getUserById, getUsers, updateUser, deleteUser, getUserByEmail, fetchInactiveUsers } = require("./user.service");
+const { create, getUserById, getUsers, updateUser, deleteUser, getUserByEmail, fetchInactiveUsers, updateRole } = require("./user.service");
 
 const { genSaltSync, hashSync, compareSync} = require("bcrypt");
 
@@ -8,25 +8,51 @@ const { sign } = require("jsonwebtoken");
 module.exports = {
     createUser: (req, res) => {
         const body = req.body;
-        const salt = genSaltSync(10);
-        body.password = hashSync(body.password, salt);
-        create(body, (err, results) => {
+
+        getUserByEmail(body.email, (err, results) => {
             if (err) {
                 console.log(err);
-                return res.status(500).json({
+            }
+            if (!results) {
+                const salt = genSaltSync(10);
+                body.password = hashSync(body.password, salt);
+                create(body, (err, results) => {
+                    if (err) {
+                        console.log(err);
+                        return res.json({
+                            success: 0,
+                            message: "Database connection error"
+                        });
+                    }
+                    return res.json({
+                        success: 1,
+                        data: results
+                    })
+                });
+            } if (results){
+                return res.json({
                     success: 0,
-                    message: "Database connection error"
+                    data: "this email is already in use"
                 });
             }
-            return res.status(200).json({
-                success: 1,
-                data: results
-            })
+        })
+    },
+
+    changeRole: (req, res) => {
+        const id = req.params.id;
+        const newRole = req.params.role;
+        updateRole(id, newRole, (err, results) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            return res.json({
+                success: 1
+            });
         });
     },
 
     activateUser: (req, res) => {
-        console.log(req.params);
         const id = req.params.id;
         setUserActive(id, (err, results) => {
             if (err) {
