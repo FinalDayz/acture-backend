@@ -33,6 +33,37 @@ module.exports = {
         )
     },
 
+    getEvents: callback => {
+        pool.query(
+            'SELECT *' +
+            ' FROM Post;' +
+            ' ORDER BY postDate' +
+            ' LIMIT 50 OFFSET 0',
+            (error, results, fields) => {
+                if (error) {
+                    return callback(error)
+                }
+                return callback(null, results);
+            }            
+        )
+    },
+
+    getAttendance: (id, callback) => {
+        pool.query(
+            'SELECT *' +
+            ' FROM Attendants' +
+            ' WHERE userId= ?;',
+            [id],
+            (error, results, fields) => {
+                if (error) {
+                    return callback(error)
+                }
+                return callback(null, results);
+            }
+        )
+    }
+
+
     // getNewsPosts: callback => {
     //     pool.query(
     //         'select * from posts where userId=1 order by postDate desc',
@@ -47,27 +78,3 @@ module.exports = {
     // }
 }
 
-/*
-Query om posts op te halen
-
-SELECT DISTINCT * 
-FROM Post 
-WHERE userId=1 -- userId van Lugus om Lugusnieuws op te halen
-OR userId IN (
-    SELECT followedUser
-    FROM Followed_people
-    WHERE userId=2 -- vervang '2'door ID van de ingelogde user
-)
-OR userId IN (
-	SELECT startupId
-    FROM Followed_startups
-    WHERE userId=2 -- vervang '2' door ID van de ingelogde user
-)
-OR userId IN (
-	SELECT categoryId
-    FROM Followed_disciplines
-    WHERE userId=2 -- vervang '2' door ID van de ingelogde user
-)
-ORDER BY postDate
-LIMIT 50 OFFSET 0 -- Maximaal aantal posts dat wordt geladen 
-*/ 
