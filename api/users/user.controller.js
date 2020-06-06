@@ -40,7 +40,7 @@ module.exports = {
 
     changeRole: (req, res) => {
         const id = req.params.id;
-        const newRole = req.params.role;
+        const newRole = req.params.newRole;
         updateRole(id, newRole, (err, results) => {
             if (err) {
                 console.log(err);
