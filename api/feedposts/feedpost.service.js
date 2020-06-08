@@ -73,6 +73,20 @@ module.exports = {
                 return callback(null, true);
             }
         )
+    },
+
+    getPersonalBlogs: (userId, callback) => {
+        pool.query(
+            'SELECT * FROM `Post` WHERE `userId` = ? AND `categoryId` = 7',
+            [userId],
+            (error, results, fields) => {
+                if (error) {
+                    return callback(error);
+                }
+
+                return callback(null, results);
+            }
+        )
     }
 
 

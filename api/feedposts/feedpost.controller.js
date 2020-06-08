@@ -1,4 +1,4 @@
-const { getFeedPosts, getOnlyNews, verifyPoster, deleteFeedPost } = require("./feedpost.service");
+const { getFeedPosts, getOnlyNews, verifyPoster, deleteFeedPost, getPersonalBlogs } = require("./feedpost.service");
 const { getRoleFromToken, getUserIdFromToken } = require("../../auth/token_validation");
 
 module.exports = {
@@ -102,6 +102,25 @@ module.exports = {
             return res.json({
                 success: 1,
                 message: "post deleted successfully"
+            });
+        });
+    },
+
+    getPersonalBlogs: (req, res) => {
+        getPersonalBlogs(getUserIdFromToken(req.get("authorization")), (err, results) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            if (!results) {
+                return res.json({
+                    success: 0,
+                    message: "Record not found"
+                });
+            }
+            return res.json({
+                success: 1,
+                data: results
             });
         });
     }
