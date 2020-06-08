@@ -107,7 +107,7 @@ module.exports = {
     },
 
     getPersonalBlogs: (req, res) => {
-        getPersonalBlogs(getUserIdFromToken(req.get("authorization")), (err, results) => {
+        getPersonalBlogs(req.body.userId, (err, results) => {
             if (err) {
                 console.log(err);
                 return;
