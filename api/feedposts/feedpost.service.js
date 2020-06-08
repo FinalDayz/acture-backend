@@ -41,14 +41,40 @@ module.exports = {
             [],
             (error, results, fields) => {
                 if (error) {
-                    return callback(error)
+                    return callback(error);
                 }
                 return callback(null, results);
             }
         )
-
-
     },
+
+    verifyPoster: (userId, postId, callback) => {
+        pool.query(
+            'SELECT EXISTS(SELECT * FROM `Post` WHERE `postId` = ? AND `userId` = ?) AS `results`;',
+            [postId, userId],
+            (error, results, fields) => {
+                if (error) {
+                    return callback(error);
+                }
+                return callback(null, results[0]);
+            }
+        )
+    },
+
+    deleteFeedPost: (postId, callback) => {
+        pool.query(
+            'DELETE FROM `Post` WHERE `Post`.`postId` = ?',
+            [postId],
+            (error, results, fields) => {
+                if (error) {
+                    return callback(error);
+                }
+
+                return callback(null, true);
+            }
+        )
+    }
+
 
     // getNewsPosts: callback => {
     //     pool.query(
@@ -62,7 +88,7 @@ module.exports = {
     //         }
     //     )
     // }
-}
+};
 
 /*
 Query om posts op te halen
