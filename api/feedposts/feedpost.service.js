@@ -27,7 +27,20 @@ module.exports = {
                 return callback(null, results[0]);
             }            
         )
-    },    
+    },
+    
+    getAttendanceSP: (id, callback) => {
+        pool.query(
+            'CALL get_attendance(?)',
+            [id],
+            (error, results, fields) => {
+                if (error) {
+                    return callback(error)
+                }
+                return callback(null, results[0]);
+            }            
+        )
+    },
 
     //Requires stored procedure: get_only_lugus
     getOnlyNews: (offs, callback) => {
