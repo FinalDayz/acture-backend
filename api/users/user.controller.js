@@ -84,6 +84,7 @@ module.exports = {
         getUserById(id, (err, results) => {
             if (err) {
                 console.log(err);
+
                 return;
             }
             if (!results) {
