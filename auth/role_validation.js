@@ -1,4 +1,4 @@
-const { decode } = require("jsonwebtoken");
+const { getRoleFromToken } = require("./token_validation");
 
 
 const roles = Object.freeze({
@@ -10,9 +10,7 @@ const roles = Object.freeze({
 module.exports = {
     checkRole(role){
         return (req, res, next) => {
-            let token = req.get("authorization");
-            token = token.slice(7);
-            let userRole = decode(token).result.role;
+            let userRole = getRoleFromToken(req.get("authorization"));
 
             if (roles[userRole] < roles[role]) {
                 res.json({
