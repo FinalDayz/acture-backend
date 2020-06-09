@@ -4,8 +4,8 @@ const router = require("express").Router();
 const { checkToken } = require("../../auth/token_validation");
 
 
-router.post("/addPost", addPost);
+router.post("/addPost", checkToken, addPost);
 
-router.get("/getAllCategories", getCategories)
+router.get("/getAllCategories", checkToken,getCategories)
 
 module.exports = router;
