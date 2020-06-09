@@ -20,6 +20,7 @@ module.exports = {
         });
     },
 
+
     getCategories: (req, res) => {
         getCategories((err, results) => {
             if (err) {
