@@ -29,12 +29,11 @@ module.exports = {
         )
     },    
 
-    getOnlyNews: (callback) => {
+    //Requires stored procedure: get_only_lugus
+    getOnlyNews: (offs, callback) => {
         pool.query(
-            'SELECT DISTINCT *' +
-            ' FROM Post' +
-            ' WHERE userId=1', //vervang '1' door ID van Lugus
-            [],
+            'CALL get_only_lugus(?)'
+            [offs],
             (error, results, fields) => {
                 if (error) {
                     return callback(error);

@@ -25,7 +25,7 @@ module.exports = {
             });
         }
         else {
-            getOnlyNews( (err, results) => {
+            getOnlyNews(offs, (err, results) => {
                 if (err) {
                     console.log(err);
                     return;
