@@ -1,5 +1,5 @@
 const {setUserActive} = require("./user.service");
-const { create, getUserById, getUsers, updateUser, deleteUser, getUserByEmail, fetchInactiveUsers, updateRole, updatePassword } = require("./user.service");
+const { create, getUserById, getUsers, updateUser, deleteUser, getUserByEmail, fetchInOrActiveUsers, updateRole, updatePassword } = require("./user.service");
 
 const { genSaltSync, hashSync, compareSync} = require("bcrypt");
 
@@ -40,7 +40,7 @@ module.exports = {
 
     changeRole: (req, res) => {
         const id = req.params.id;
-        const newRole = req.params.role;
+        const newRole = req.params.newRole;
         updateRole(id, newRole, (err, results) => {
             if (err) {
                 console.log(err);
@@ -65,8 +65,9 @@ module.exports = {
         });
     },
 
-    getInactiveUsers: (req, res) => {
-        fetchInactiveUsers((err, results) => {
+    getInOrActiveUsers: (req, res) => {
+        const active = req.params.active === 'true';
+        fetchInOrActiveUsers(active, (err, results) => {
             if (err) {
                 console.log(err);
                 return;
@@ -135,8 +136,8 @@ module.exports = {
     },
 
     deleteUser: (req, res) => {
-        const data = req.body;
-        deleteUser(data, (err, results) => {
+        const id = req.params.id;
+        deleteUser(id, (err, results) => {
             if (err) {
                 console.log(err);
                 return;

@@ -40,13 +40,14 @@ module.exports = {
         });
     },
 
-    fetchInactiveUsers: callback => {
+    fetchInOrActiveUsers: (active, callback) => {
         pool.query(
             `SELECT
             userId, firstname, tussenvoegsel, register_date, lastname,
             TO_BASE64(image) image, register_date, role, email, activated
-            FROM Account
-            WHERE activated <> 1 OR activated IS NULL`,
+            FROM Account ` + (active ?
+                `WHERE activated = 1` :
+                `WHERE activated <> 1 OR activated IS NULL`),
             [],
             (error, results, fields) => {
                 if (error) {
@@ -133,13 +134,13 @@ module.exports = {
         );
     },
 
-    deleteUser: (data, callback) => {
+    deleteUser: (id, callback) => {
         pool.query(
-            `UPDATE 'Account' SET 
-                'address'='','unregister_date'=NOW(),'email'='','image'=null,
-                'telephone'=null,'description'=null,'activated'=0, 'password'=null
-                WHERE 'userId' = ?`,
-            [data.id],
+            `UPDATE Account SET 
+                address='',unregister_date=NOW(),email='',image=null,
+                telephone=null,description=null,activated=0, password=null
+                WHERE userId = ?`,
+            [id],
             (error, results, fields) => {
                 if (error) {
                     return callback(error);
