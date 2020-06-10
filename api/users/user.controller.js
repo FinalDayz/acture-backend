@@ -136,8 +136,8 @@ module.exports = {
     },
 
     deleteUser: (req, res) => {
-        const data = req.body;
-        deleteUser(data, (err, results) => {
+        const id = req.params.id;
+        deleteUser(id, (err, results) => {
             if (err) {
                 console.log(err);
                 return;

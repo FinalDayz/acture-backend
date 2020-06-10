@@ -8,7 +8,7 @@ router.post("/", checkToken, createUser);
 router.get("/", checkToken, getUsers);
 router.get("/byid/:id", checkToken, checkRole('user'), getUserById);
 router.patch("/", checkToken, updateUsers);
-router.delete("/", checkToken, deleteUser);
+router.delete("/:id", checkToken, deleteUser);
 
 router.get("/active/:active", checkToken, checkRole('admin'), getInOrActiveUsers);
 router.patch("/activateUser/:id", checkToken, checkRole('admin'), activateUser);
