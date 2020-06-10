@@ -1,5 +1,5 @@
 const {setUserActive} = require("./user.service");
-const { create, getUserById, getUsers, updateUser, deleteUser, getUserByEmail, fetchInactiveUsers, updateRole } = require("./user.service");
+const { create, getUserById, getUsers, updateUser, deleteUser, getUserByEmail, fetchInOrActiveUsers, updateRole, updatePassword } = require("./user.service");
 
 const { genSaltSync, hashSync, compareSync} = require("bcrypt");
 
@@ -40,7 +40,7 @@ module.exports = {
 
     changeRole: (req, res) => {
         const id = req.params.id;
-        const newRole = req.params.role;
+        const newRole = req.params.newRole;
         updateRole(id, newRole, (err, results) => {
             if (err) {
                 console.log(err);
@@ -65,8 +65,9 @@ module.exports = {
         });
     },
 
-    getInactiveUsers: (req, res) => {
-        fetchInactiveUsers((err, results) => {
+    getInOrActiveUsers: (req, res) => {
+        const active = req.params.active === 'true';
+        fetchInOrActiveUsers(active, (err, results) => {
             if (err) {
                 console.log(err);
                 return;
@@ -135,8 +136,8 @@ module.exports = {
     },
 
     deleteUser: (req, res) => {
-        const data = req.body;
-        deleteUser(data, (err, results) => {
+        const id = req.params.id;
+        deleteUser(id, (err, results) => {
             if (err) {
                 console.log(err);
                 return;
@@ -180,6 +181,53 @@ module.exports = {
             }
             else {
                 return res.json({
+                    success: 0,
+                    data: "Invalid email or password"
+                });
+            }
+        });
+    },
+
+    changePassword: (req, res) => {
+        const body = req.body;
+        const salt = genSaltSync(10);
+        body.newpassword = hashSync(body.newpassword, salt);
+        updatePassword(body, (err, results) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            if (!results) {
+                return res.json({
+                    success: 0,
+                    message: "Failed to update password"
+                })
+            }
+            return res.json({
+                success: 1,
+                message: "updated password successfully"
+            });
+        });
+    },
+
+    checkLogin: (req, res, next) => {
+        const body = req.body;
+        getUserByEmail(body.email, (err, results) => {
+            if (err) {
+                console.log(err);
+            }
+            if (!results) {
+                return res.json({
+                    success: 0,
+                    data: "Invalid email or password"
+                });
+            }
+            const result = compareSync(body.password, results.password);
+            if (result) {
+                next();
+            }
+            else {
+                res.json({
                     success: 0,
                     data: "Invalid email or password"
                 });

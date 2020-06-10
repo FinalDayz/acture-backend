@@ -14,6 +14,7 @@ const app = express();
 const userRouter = require("./api/users/user.router");
 const feedPostRouter = require("./api/feedposts/feedpost.router");
 const attendanceRouter = require("./api/attendance/attendance.router");
+const followRouter = require("./api/follow/follor.router");
 
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
@@ -51,6 +52,7 @@ app.use(express.json());
 app.use("/api/users", userRouter);
 app.use("/api/feedposts", feedPostRouter);
 app.use("/api/attendance", attendanceRouter);
+app.use("/api/follow", followRouter);
 
 app.listen(process.env.APP_PORT, () => {
   console.log("Server up and running on PORT : ", process.env.APP_PORT);
