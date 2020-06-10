@@ -108,7 +108,27 @@ module.exports = {
     },
 
     getEventsSP: (req, res) => {
-        getEventsSP((err, results) => {
+        const id = getUserIdFromToken(req.get("authorization"));
+        getEventsSP(id, (err, results) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            if (!results) {
+                return res.json({
+                    success: 0,
+                    message: "Record not found"
+                });
+            }
+            return res.json({
+                success: 1,
+                data: results
+            });
+        });
+    },
+
+    getAttendanceSP: (req, res) => {
+        getAttendanceSP((err, results) => {
             if (err) {
                 console.log(err);
                 return;
