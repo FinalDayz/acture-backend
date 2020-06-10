@@ -117,6 +117,22 @@ module.exports = {
         );
     },
 
+    updatePassword: (data, callback) => {
+        pool.query(
+            `update Account set password = ? where email = ? `,
+            [
+                data.newpassword,
+                data.email
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    return callback(error);
+                }
+                return callback(null, results);
+            }
+        );
+    },
+
     deleteUser: (data, callback) => {
         pool.query(
             `UPDATE 'Account' SET 
