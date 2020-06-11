@@ -17,9 +17,10 @@ module.exports = {
     },
 
     //Requires stored procedure: get_events
-    getEventsSP: (callback) => {
+    getEventsSP: (userId, callback) => {
         pool.query(
-            'CALL get_events',
+            'CALL get_events(?)',
+            [userId],
             (error, results, fields) => {
                 if (error) {
                     return callback(error)
@@ -45,7 +46,7 @@ module.exports = {
     //Requires stored procedure: get_only_lugus
     getOnlyNews: (offs, callback) => {
         pool.query(
-            'CALL get_only_lugus(?)'
+            'CALL get_only_lugus(?)',
             [offs],
             (error, results, fields) => {
                 if (error) {
