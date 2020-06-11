@@ -173,13 +173,16 @@ module.exports = {
             } else result = false;
             if (result) {
                 results.password = undefined; // Don't send passwords unnecessarily
-                const jsontoken = sign({ result: results }, process.env.JWT_KEY, {
+                let userWithoutImage = {...results};
+                userWithoutImage.image = null;
+                const jsontoken = sign({ result: userWithoutImage }, process.env.JWT_KEY, {
                     expiresIn: "1h"
                 });
                 return res.json({
                     success: 1,
                     message: "Login successful",
-                    token: jsontoken
+                    token: jsontoken,
+                    user: results,
                 });
             }
             else {

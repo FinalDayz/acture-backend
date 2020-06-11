@@ -153,7 +153,7 @@ module.exports = {
     getUserByEmail: (email, callback) => {
         pool.query(
             `select firstname, lastname, userId, address, tussenvoegsel, register_date, 
-            unregister_date, password, role, email, telephone, description, activated 
+            unregister_date, password, role, email, telephone, description, activated, TO_BASE64(image) as image
             from Account where email = ?`,
             [email],
             (error, results, fields) => {
