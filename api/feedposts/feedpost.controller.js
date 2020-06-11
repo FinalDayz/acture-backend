@@ -108,7 +108,8 @@ module.exports = {
     },
 
     getEventsSP: (req, res) => {
-        getEventsSP((err, results) => {
+        const userId = getUserIdFromToken(req.get("authorization"));
+        getEventsSP(userId, (err, results) => {
             if (err) {
                 console.log(err);
                 return;
