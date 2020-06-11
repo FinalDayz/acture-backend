@@ -167,7 +167,10 @@ module.exports = {
                     data: "Invalid email or password"
                 });
             }
-            const result = compareSync(body.password, results.password);
+            let result = false;
+            if(body.password.length != 0 && body.email.length != 0) {
+                result = compareSync(body.password, results.password);
+            } else result = false;
             if (result) {
                 results.password = undefined; // Don't send passwords unnecessarily
                 const jsontoken = sign({ result: results }, process.env.JWT_KEY, {
