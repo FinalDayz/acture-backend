@@ -15,11 +15,11 @@ module.exports = {
                 data.email,
             ],
             (error, results, fields) => {
-                if (error) {
-                    return callback(error);
-                }
-                return callback(null, results);
+            if (error) {
+                return callback(error);
             }
+            return callback(null, results);
+        }
         )
     },
 
