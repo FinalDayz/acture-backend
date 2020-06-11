@@ -5,7 +5,7 @@ module.exports = {
     insertAttendance: (eventId, userId, callback) => {
         pool.query(
             'INSERT INTO Attendants VALUE (? , ?)',
-            [eventId, userId, userId, eventId],
+            [eventId, userId],
             (error, results, fields) => {
                 if (error) {
                     return callback(error);
