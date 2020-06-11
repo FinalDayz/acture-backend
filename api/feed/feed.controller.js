@@ -10,6 +10,7 @@ module.exports = {
     addPost:(req,res) => {
         const userId = getUserIdFromToken(req.get("authorization"))
         const body = req.body;
+        console.log("backennddd")
         insertPost(body, userId,(err, results) => {
             if (err) {
                 console.log(err);
