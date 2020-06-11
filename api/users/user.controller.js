@@ -225,7 +225,10 @@ module.exports = {
                     data: "Invalid email or password"
                 });
             }
-            const result = compareSync(body.password, results.password);
+            let result = false;
+            if(body.password.length != 0 && body.email.length != 0) {
+                result = compareSync(body.password, results.password);
+            } else result = false;
             if (result) {
                 next();
             }
