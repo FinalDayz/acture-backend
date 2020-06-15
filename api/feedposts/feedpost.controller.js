@@ -1,4 +1,4 @@
-const { getFeedSP, getEventsSP, getOnlyNews, verifyPoster, deleteFeedPost, getPersonalBlogs } = require("./feedpost.service");
+const { getFeedSP, getEventsSP, getGuidesSP, getOnlyNews, verifyPoster, deleteFeedPost, getPersonalBlogs } = require("./feedpost.service");
 const { getRoleFromToken, getUserIdFromToken } = require("../../auth/token_validation");
 
 module.exports = {
@@ -129,6 +129,25 @@ module.exports = {
 
     getAttendanceSP: (req, res) => {
         getAttendanceSP((err, results) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            if (!results) {
+                return res.json({
+                    success: 0,
+                    message: "Record not found"
+                });
+            }
+            return res.json({
+                success: 1,
+                data: results
+            });
+        });
+    },
+
+    getGuidesSP: (req, res) => {
+        getGuidesSP((err, results) => {
             if (err) {
                 console.log(err);
                 return;

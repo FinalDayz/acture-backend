@@ -43,6 +43,18 @@ module.exports = {
         )
     },
 
+    getGuidesSP: (callback) => {
+        pool.query(
+            'CALL get_guides',
+            (error, results, fields) => {
+                if (error) {
+                    return callback(error)
+                }
+                return callback(null, results[0]);
+            }            
+        )
+    },
+
     //Requires stored procedure: get_only_lugus
     getOnlyNews: (offs, callback) => {
         pool.query(
