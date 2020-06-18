@@ -1,7 +1,8 @@
 const pool = require("../../config/database");
+const {removePrivacyFields} = require("../privacy/privacy.service");
 
 module.exports = {
-    
+
     //Requires stored procedure: get_feed
     getFeedSP: (id, offs, callback) => {
         pool.query(
@@ -11,8 +12,9 @@ module.exports = {
                 if (error) {
                     return callback(error)
                 }
+                results = removePrivacyFields(results);
                 return callback(null, results[0]);
-            } 
+            }
         )
     },
 
@@ -26,10 +28,10 @@ module.exports = {
                     return callback(error)
                 }
                 return callback(null, results[0]);
-            }            
+            }
         )
     },
-    
+
     getAttendanceSP: (id, callback) => {
         pool.query(
             'CALL get_attendance(?)',
@@ -39,7 +41,7 @@ module.exports = {
                     return callback(error)
                 }
                 return callback(null, results[0]);
-            }            
+            }
         )
     },
 
@@ -97,4 +99,4 @@ module.exports = {
             }
         )
     }
-}    
+}

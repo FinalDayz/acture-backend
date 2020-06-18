@@ -1,5 +1,5 @@
 const {getUserIdFromToken} = require("../../auth/token_validation");
-const {fetchSettings} = require("./privacy.service");
+const {fetchSettings, saveSettings} = require("./privacy.service");
 
 
 const responseFunc = (res, err, results) => {
@@ -19,6 +19,12 @@ module.exports = {
         fetchSettings(thisUserId, responseFunc.bind(this, res));
     },
     changePrivacySettings: (req, res) => {
-
+        const body = req.body;
+        const thisUserId = getUserIdFromToken(req.get("authorization"));
+        saveSettings(
+            body.firstname, body.lastname, body.address,
+            body.preposition, body.email, thisUserId, body.telephone,
+            responseFunc.bind(this, res)
+        );
     },
 };
