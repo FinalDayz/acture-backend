@@ -16,6 +16,20 @@ module.exports = {
         )
     },
 
+    //Requires stored procedure: get_global_feed
+    getGlobalFeedSP: (offs, callback) => {
+        pool.query(
+            'CALL get_global_feed(?)',
+            [offs],
+            (error, results, fields) => {
+                if (error) {
+                    return callback(error)
+                }
+                return callback(null, results[0]);
+            } 
+        )
+    },
+
     //Requires stored procedure: get_events
     getEventsSP: (userId, callback) => {
         pool.query(
