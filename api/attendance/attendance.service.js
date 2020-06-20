@@ -14,6 +14,23 @@ module.exports = {
             }
         )
     },
+    insertTotalPeople: (eventId, callback)=>{
+        pool.query(
+            'UPDATE Event' +
+            'SET total_people = (SELECT COUNT(A.userId) ' +
+            '                    FROM (SELECT * FROM Event) AS B' +
+            '                    INNER JOIN Attendants A' +
+            '                    ON B.evenementId = A.eventId' +
+            '                WHERE A.eventId = ?) where B.evenementId = ?',
+            [eventId,eventId],
+            (error, results, fields) => {
+                if (error) {
+                    return callback(error);
+                }
+                return callback(null, true);
+            }
+        )
+    },
 
     fetchAll: (eventId, callback) => {
         pool.query(

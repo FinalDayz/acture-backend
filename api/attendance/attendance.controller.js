@@ -1,3 +1,4 @@
+const {insertTotalPeople} = require("./attendance.service");
 
 const { getUserIdFromToken } = require("../../auth/token_validation");
 const { insertAttendance } = require("./attendance.service");
@@ -23,7 +24,14 @@ module.exports = {
                 message: "Insert succesful"
             });
         });
+        insertTotalPeople(eventId,(err,results)=>{
+            return res.json({
+                success: 1,
+                message: "Total people updated"
+            });
+        });
     },
+
 
     getAttendance: (req, res) => {
         const eventId = req.params.eventId;
