@@ -1,7 +1,7 @@
 const {addFollow} = require("./startup.service");
 const {deleteFollow} = require("./startup.service");
 const {getUserIdFromToken} = require("../../auth/token_validation");
-const {fetchAll} = require("./startup.service");
+const {fetchAll, workingForfetchAll} = require("./startup.service");
 
 const {} = require("./startup.service");
 
@@ -18,22 +18,26 @@ const responseFunc = (res, err, results) => {
 
 module.exports = {
     followQuery: (req, res) => {
-        const filter = req.params.filter;
+        const filter = req.params.userid;
         const thisUserId = getUserIdFromToken(req.get("authorization"));
-        const includeNotfollowed = filter === 'all';
-        fetchAll(thisUserId, includeNotfollowed, responseFunc.bind(this, res));
+        fetchAll(thisUserId, filter, responseFunc.bind(this, res));
+    },
 
+    workingForQuery: (req, res) => {
+        const filter = req.params.startupid;
+        const thisUserId = getUserIdFromToken(req.get("authorization"));
+        workingForfetchAll(thisUserId, filter, responseFunc.bind(this, res));
     },
 
     followOrNot: (req, res) => {
         const thisUserId = getUserIdFromToken(req.get("authorization"));
         const follow = req.params.followOrNot;
-        const theirUserId = req.params.id;
+        const theirStartupId = req.params.id;
 
         if(follow == 1) {
-            addFollow(thisUserId, theirUserId, responseFunc.bind(this, res));
+            addFollow(thisUserId, theirStartupId, responseFunc.bind(this, res));
         } else if(follow == 0) {
-            deleteFollow(thisUserId, theirUserId, responseFunc.bind(this, res));
+            deleteFollow(thisUserId, theirStartupId, responseFunc.bind(this, res));
         }
 
     },
