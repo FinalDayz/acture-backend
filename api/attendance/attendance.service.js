@@ -16,12 +16,12 @@ module.exports = {
     },
     insertTotalPeople: (eventId, callback)=>{
         pool.query(
-            'UPDATE Event' +
+            'UPDATE Event ' +
             'SET total_people = (SELECT COUNT(A.userId) ' +
             '                    FROM (SELECT * FROM Event) AS B' +
             '                    INNER JOIN Attendants A' +
             '                    ON B.evenementId = A.eventId' +
-            '                WHERE A.eventId = ?) where B.evenementId = ?',
+            '                WHERE A.eventId = ?) where evenementId = ?',
             [eventId,eventId],
             (error, results, fields) => {
                 if (error) {

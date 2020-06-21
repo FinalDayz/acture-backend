@@ -25,10 +25,15 @@ module.exports = {
             });
         });
         insertTotalPeople(eventId,(err,results)=>{
-            return res.json({
-                success: 1,
-                message: "Total people updated"
-            });
+            console.log("total people reached")
+            if (err) {
+                console.log(err);
+                return res.json({
+                    success: 0,
+                    message: "Database connection error"
+                });
+            }
+      return
         });
     },
 
