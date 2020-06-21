@@ -20,6 +20,7 @@ const feedPostRouter = require("./api/feedposts/feedpost.router");
 const attendanceRouter = require("./api/attendance/attendance.router");
 
 const followRouter = require("./api/follow/follor.router");
+const startupRouter = require("./api/startups/startup.router");
 
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
@@ -62,6 +63,7 @@ app.use("/api/feed", feedRouter);
 app.use("/api/feedposts", feedPostRouter);
 app.use("/api/attendance", attendanceRouter);
 app.use("/api/follow", followRouter);
+app.use("/api/startup", startupRouter);
 
 
 app.listen(process.env.APP_PORT, () => {

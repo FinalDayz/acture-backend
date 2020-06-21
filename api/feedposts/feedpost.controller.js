@@ -1,4 +1,4 @@
-const { getFeedSP, getEventsSP, getOnlyNews, verifyPoster, deleteFeedPost, getPersonalBlogs } = require("./feedpost.service");
+const { getFeedSP, getGlobalFeedSP, getEventsSP, getGuidesSP, getOnlyNews, verifyPoster, deleteFeedPost, getPersonalBlogs } = require("./feedpost.service");
 const { getRoleFromToken, getUserIdFromToken } = require("../../auth/token_validation");
 
 module.exports = {
@@ -8,6 +8,47 @@ module.exports = {
         userRole = getRoleFromToken(req.get("authorization"));
         if (userRole == 'member' || userRole == 'admin') {
             getFeedSP(id, offs, (err, results) => {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+                if (!results) {
+                    return res.json({
+                        success: 0,
+                        message: "Record not found"
+                    });
+                }
+                return res.json({
+                    success: 1,
+                    data: results
+                });
+            });
+        }
+        else {
+            getOnlyNews(offs, (err, results) => {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+                if (!results) {
+                    return res.json({
+                        success: 0,
+                        message: "Record not found"
+                    });
+                }
+                return res.json({
+                    success: 1,
+                    data: results
+                });
+            });
+        }
+    },
+
+    getGlobalFeedPosts: (req, res) => {
+        const offs = req.body.offs;
+        userRole = getRoleFromToken(req.get("authorization"));
+        if (userRole == 'member' || userRole == 'admin') {
+            getGlobalFeedSP(offs, (err, results) => {
                 if (err) {
                     console.log(err);
                     return;
@@ -129,6 +170,25 @@ module.exports = {
 
     getAttendanceSP: (req, res) => {
         getAttendanceSP((err, results) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            if (!results) {
+                return res.json({
+                    success: 0,
+                    message: "Record not found"
+                });
+            }
+            return res.json({
+                success: 1,
+                data: results
+            });
+        });
+    },
+
+    getGuidesSP: (req, res) => {
+        getGuidesSP((err, results) => {
             if (err) {
                 console.log(err);
                 return;
