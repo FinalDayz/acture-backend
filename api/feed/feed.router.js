@@ -6,6 +6,7 @@ const { checkToken } = require("../../auth/token_validation");
 
 router.post("/addPost", checkToken, addPost);
 
-router.get("/getAllCategories", checkToken,getCategories)
+router.get("/getAllCategories",checkToken,getCategories)
 
 module.exports = router;
+
