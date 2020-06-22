@@ -9,6 +9,7 @@ module.exports = {
     createUser: (req, res) => {
         const body = req.body;
 
+
         getUserByEmail(body.email, (err, results) => {
             if (err) {
                 console.log(err);
@@ -36,6 +37,27 @@ module.exports = {
                 });
             }
         })
+    },
+
+    resetPassword: (req, res) => {
+        const body = req.body;
+        const salt = genSaltSync(10);
+        console.log(body.newpassword + " " + body.email)
+        body.newpassword = hashSync(body.newpassword, salt);
+        updatePassword(body, (err, results) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            if (!results) {
+                return res.json({
+                    success: 0,
+                })
+            }
+            return res.json({
+                success: 1,
+            });
+        });
     },
 
     changeRole: (req, res) => {

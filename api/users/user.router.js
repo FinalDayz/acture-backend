@@ -1,4 +1,4 @@
-const { createUser, getUserById, getUsers, updateUsers, deleteUser, login, register, getInOrActiveUsers, activateUser, changeRole, checkLogin, changePassword } = require("./user.controller");
+const { createUser, getUserById, getUsers, updateUsers, deleteUser, login, register, getInOrActiveUsers, activateUser, changeRole, checkLogin, changePassword, resetPassword } = require("./user.controller");
 const router = require("express").Router();
 
 const { checkToken } = require("../../auth/token_validation");
@@ -18,6 +18,7 @@ router.post("/changeRole/:id/:newRole", checkToken, checkRole('admin'), changeRo
 router.post("/login", login);
 
 router.post("/register", createUser);
+router.patch("/resetPassword", checkToken, checkRole("admin"), resetPassword);
 
 router.post("/changePassword", checkLogin, changePassword);
 
