@@ -1,4 +1,5 @@
 const pool = require("../../config/database");
+const {removePrivacyFields} = require("../privacy/privacy.service");
 
 module.exports = {
     create: (data, callback) => {
@@ -15,11 +16,11 @@ module.exports = {
                 data.email,
             ],
             (error, results, fields) => {
-                if (error) {
-                    return callback(error);
-                }
-                return callback(null, results);
+            if (error) {
+                return callback(error);
             }
+            return callback(null, results);
+        }
         )
     },
 
@@ -60,12 +61,17 @@ module.exports = {
 
     getUsers: callback => {
         pool.query(
-            `select userId, firstname, lastname, password, role, email, TO_BASE64(image) from Account`,
+            `select userId, firstname, lastname, 
+            password, role, email, TO_BASE64(image),
+            pr.address as privacyAddress, pr.email as privacyEmail, pr.telephone as privacyTelephone
+            from Account
+            LEFT JOIN Privacy pr ON pr.userId = a.userId`,
             [],
             (error, results, fields) => {
                 if (error) {
                     return callback(error);
                 }
+                results = removePrivacyFields(results);
                 return callback(null, results);
             }
         )
@@ -73,7 +79,7 @@ module.exports = {
 
     getUserById: (id, callback) => {
         pool.query(
-            `select userId, firstname, lastname, password, role, email from Account where userId = ?`,
+            `select userId, firstname, lastname, role, tussenvoegsel, email, TO_BASE64(image) image, telephone, description from Account where userId = ?`,
             [id],
             (error, results, fields) => {
                 if (error) {
@@ -153,7 +159,7 @@ module.exports = {
     getUserByEmail: (email, callback) => {
         pool.query(
             `select firstname, lastname, userId, address, tussenvoegsel, register_date, 
-            unregister_date, password, role, email, telephone, description, activated 
+            unregister_date, password, role, email, telephone, description, activated, TO_BASE64(image) as image
             from Account where email = ?`,
             [email],
             (error, results, fields) => {

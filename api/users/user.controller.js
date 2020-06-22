@@ -9,6 +9,7 @@ module.exports = {
     createUser: (req, res) => {
         const body = req.body;
 
+
         getUserByEmail(body.email, (err, results) => {
             if (err) {
                 console.log(err);
@@ -36,6 +37,27 @@ module.exports = {
                 });
             }
         })
+    },
+
+    resetPassword: (req, res) => {
+        const body = req.body;
+        const salt = genSaltSync(10);
+        console.log(body.newpassword + " " + body.email)
+        body.newpassword = hashSync(body.newpassword, salt);
+        updatePassword(body, (err, results) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            if (!results) {
+                return res.json({
+                    success: 0,
+                })
+            }
+            return res.json({
+                success: 1,
+            });
+        });
     },
 
     changeRole: (req, res) => {
@@ -167,16 +189,22 @@ module.exports = {
                     data: "Invalid email or password"
                 });
             }
-            const result = compareSync(body.password, results.password);
+            let result = false;
+            if(body.password.length != 0 && body.email.length != 0) {
+                result = compareSync(body.password, results.password);
+            } else result = false;
             if (result) {
                 results.password = undefined; // Don't send passwords unnecessarily
-                const jsontoken = sign({ result: results }, process.env.JWT_KEY, {
+                let userWithoutImage = {...results};
+                userWithoutImage.image = null;
+                const jsontoken = sign({ result: userWithoutImage }, process.env.JWT_KEY, {
                     expiresIn: "1h"
                 });
                 return res.json({
                     success: 1,
                     message: "Login successful",
-                    token: jsontoken
+                    token: jsontoken,
+                    user: results,
                 });
             }
             else {
@@ -222,7 +250,10 @@ module.exports = {
                     data: "Invalid email or password"
                 });
             }
-            const result = compareSync(body.password, results.password);
+            let result = false;
+            if(body.password.length != 0 && body.email.length != 0) {
+                result = compareSync(body.password, results.password);
+            } else result = false;
             if (result) {
                 next();
             }

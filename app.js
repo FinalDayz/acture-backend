@@ -1,6 +1,9 @@
 // const createError = require('http-errors');
 require("dotenv").config();
 const express = require('express');
+var bodyParser = require('body-parser');
+
+// ...
 
 // const path = require('path');
 // var cookieParser = require('cookie-parser');
@@ -12,9 +15,13 @@ const express = require('express');
 const app = express();
 
 const userRouter = require("./api/users/user.router");
+const feedRouter = require("./api/feed/feed.router");
 const feedPostRouter = require("./api/feedposts/feedpost.router");
 const attendanceRouter = require("./api/attendance/attendance.router");
+
 const followRouter = require("./api/follow/follor.router");
+const startupRouter = require("./api/startups/startup.router");
+const privacyRouter = require("./api/privacy/privacy.router");
 
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
@@ -47,12 +54,19 @@ const followRouter = require("./api/follow/follor.router");
 //
 // module.exports = app;
 
+
+app.use(bodyParser.json({limit: '20mb'}));
+app.use(bodyParser.urlencoded({limit: '20mb'}));
 app.use(express.json());
 
 app.use("/api/users", userRouter);
+app.use("/api/feed", feedRouter);
 app.use("/api/feedposts", feedPostRouter);
 app.use("/api/attendance", attendanceRouter);
 app.use("/api/follow", followRouter);
+app.use("/api/privacy", privacyRouter);
+app.use("/api/startup", startupRouter);
+
 
 app.listen(process.env.APP_PORT, () => {
   console.log("Server up and running on PORT : ", process.env.APP_PORT);
