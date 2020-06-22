@@ -1,6 +1,7 @@
 const pool = require("../../config/database");
 const {removePrivacyFields} = require("../privacy/privacy.service");
 
+
 module.exports = {
     create: (data, callback) => {
         pool.query(
@@ -20,8 +21,7 @@ module.exports = {
                 return callback(error);
             }
             return callback(null, results);
-        }
-        )
+        })
     },
 
     setUserActive: (id, callback) => {
