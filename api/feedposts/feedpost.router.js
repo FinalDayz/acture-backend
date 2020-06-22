@@ -6,7 +6,7 @@ const { checkToken } = require("../../auth/token_validation");
 router.post("/feed", getFeedPosts);//TODO: checkToken toevoegen als het klaar is
 router.post("/globalFeed", getGlobalFeedPosts);
 router.post("/events", getEventsSP);
-router.post("/attendance", getAttendanceSP)
+router.post("/attendance", getAttendanceSP);
 router.delete("/", checkAuthorityToDelete, deleteFeedPost);
 router.post("/user-blogs", getPersonalBlogs);
 router.post("/guides", getGuidesSP);
