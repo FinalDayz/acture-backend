@@ -79,7 +79,7 @@ module.exports = {
 
     getUserById: (id, callback) => {
         pool.query(
-            `select userId, firstname, lastname, password, role, email from Account where userId = ?`,
+            `select userId, firstname, lastname, role, tussenvoegsel, email, TO_BASE64(image) image, telephone, description from Account where userId = ?`,
             [id],
             (error, results, fields) => {
                 if (error) {
