@@ -1,4 +1,5 @@
 const pool = require("../../config/database");
+const {removePrivacyFields} = require("../privacy/privacy.service");
 
 module.exports = {
     create: (data, callback) => {
@@ -60,12 +61,17 @@ module.exports = {
 
     getUsers: callback => {
         pool.query(
-            `select userId, firstname, lastname, password, role, email, TO_BASE64(image) from Account`,
+            `select userId, firstname, lastname, 
+            password, role, email, TO_BASE64(image),
+            pr.address as privacyAddress, pr.email as privacyEmail, pr.telephone as privacyTelephone
+            from Account
+            LEFT JOIN Privacy pr ON pr.userId = a.userId`,
             [],
             (error, results, fields) => {
                 if (error) {
                     return callback(error);
                 }
+                results = removePrivacyFields(results);
                 return callback(null, results);
             }
         )
