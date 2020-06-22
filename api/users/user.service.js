@@ -159,8 +159,8 @@ module.exports = {
     getUserByEmail: (email, callback) => {
         pool.query(
             `select firstname, lastname, userId, address, tussenvoegsel, register_date, 
-            unregister_date, password, role, email, telephone, description, activated, TO_BASE64(image) as image
-            from Account where email = ?`,
+            unregister_date, password, role, email, telephone, description, activated, TO_BASE64(image) 
+            as image from Account where email = ?`,
             [email],
             (error, results, fields) => {
                 if (error) {
@@ -169,7 +169,39 @@ module.exports = {
                 return callback(null, results[0]);
             }
         );
-    }
+    },
+
+    getUserDetails: (id, callback) => {
+        pool.query(
+            `select firstname, lastname, tussenvoegsel, description from Account where userId = ?`,
+            [id],
+            (error, results, fields) => {
+                if (error) {
+                    return callback(error);
+                }
+                return callback(null, results[0]);
+            }
+        )
+    },
+
+    saveSettings: (data, id, callback) => {
+        pool.query(
+            'update Account set firstname=?, tussenvoegsel=?, lastname=?, description=? where userId = ?',
+            [
+                data.firstname,
+                data.tussenvoegsel,
+                data.lastname,
+                data.description,
+                id
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    return callback(error);
+                }
+                return callback(null, results);
+            }
+        );
+    },
 };
 
 
