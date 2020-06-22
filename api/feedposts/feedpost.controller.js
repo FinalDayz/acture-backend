@@ -150,7 +150,8 @@ module.exports = {
 
     getEventsSP: (req, res) => {
         const userId = getUserIdFromToken(req.get("authorization"));
-        getEventsSP(userId, (err, results) => {
+        const offs = req.body.offs;
+        getEventsSP(userId, offs,(err, results) => {
             if (err) {
                 console.log(err);
                 return;
@@ -188,7 +189,8 @@ module.exports = {
     },
 
     getGuidesSP: (req, res) => {
-        getGuidesSP((err, results) => {
+        const offs = req.body.offs;
+        getGuidesSP(offs, (err, results) => {
             if (err) {
                 console.log(err);
                 return;
