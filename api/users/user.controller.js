@@ -1,6 +1,7 @@
 const {setUserActive} = require("./user.service");
-const { create, getUserById, getUsers, updateUser, deleteUser, getUserByEmail, fetchInOrActiveUsers, updateRole, updatePassword } = require("./user.service");
+const { create, getUserById, getUsers, saveSettings, getUserDetails, updateUser, deleteUser, getUserByEmail, fetchInOrActiveUsers, updateRole, updatePassword } = require("./user.service");
 
+const {getUserIdFromToken} = require("../../auth/token_validation");
 const { genSaltSync, hashSync, compareSync} = require("bcrypt");
 
 const { sign } = require("jsonwebtoken");
@@ -263,6 +264,48 @@ module.exports = {
                     data: "Invalid email or password"
                 });
             }
+        });
+    },
+
+    getUserDetails: (req, res) =>{
+        const id = getUserIdFromToken(req.get("authorization"));
+        getUserDetails(id, (err, results) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            if (!results) {
+                return res.json({
+                    success: 0,
+                });
+            }
+            return res.json({
+                success: 1,
+                data: results
+            });
+        });
+    },
+
+    updateUserDetails: (req, res) =>{
+        const thisUserId = getUserIdFromToken(req.get("authorization"));
+
+        const body = req.body;
+        const id = getUserIdFromToken(req.get("authorization"));
+        saveSettings(body, id, (err, results) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            if (!results) {
+                return res.json({
+                    success: 0,
+                    message: "Failed to update user details"
+                })
+            }
+            return res.json({
+                success: 1,
+                message: "updated user details successfully"
+            });
         });
     }
 };
