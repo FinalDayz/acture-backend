@@ -1,0 +1,29 @@
+version : '3'
+
+services:
+  backend:
+    image: lugusbackend/node-web-app
+    ports:
+      - 49190:3000
+
+  mysql:
+    image: lugusdatabase
+    container_name: dev_mysql
+    environment:
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user
+      MYSQL_ROOT_PASSWORD: TURZpdsCLQhvpD
+      MYSQL_DATABASE: luguspocdatabase
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: dev_pma
+    links:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 8183:80

@@ -43,7 +43,7 @@ const startupRouter = require("./api/startups/startup.router");
 // app.use(function(err, req, res, next) {
 //   // set locals, only providing error in development
 //   res.locals.message = err.message;
-//   res.locals.error = req.app.get('env') === 'development' ? err : {};
+//   res.locals.error = req.app.get('.local.env') === 'development' ? err : {};
 //
 //   // render the error page
 //   res.status(err.status || 500);
@@ -65,6 +65,6 @@ app.use("/api/follow", followRouter);
 app.use("/api/startup", startupRouter);
 
 app.listen(process.env.APP_PORT, () => {
-  console.log("Server up and running on PORT : ", process.env.APP_PORT);
+  console.log("Server up and running on PORT and address : ", process.env.DB_HOST, process.env.APP_PORT);
 });
 

@@ -1,4 +1,4 @@
-#!/usr/bin/..env node
+#!/usr/bin/...local.env node
 
 /**
  * Module dependencies.
