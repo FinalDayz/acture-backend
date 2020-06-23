@@ -46,6 +46,7 @@ module.exports = {
         )
     },
 
+    //Requires stored procedure: get_attendance
     getAttendanceSP: (id, callback) => {
         pool.query(
             'CALL get_attendance(?)',
@@ -59,9 +60,24 @@ module.exports = {
         )
     },
 
+    //Requires stored procedure: get_guides
     getGuidesSP: (offs, callback) => {
         pool.query(
             'CALL get_guides(?)',
+            [offs],
+            (error, results, fields) => {
+                if (error) {
+                    return callback(error)
+                }
+                return callback(null, results[0]);
+            }            
+        )
+    },
+
+    //Requires stored procedure: get_blogs
+    getBlogsSP: (offs, callback) => {
+        pool.query(
+            'CALL get_blogs(?)',
             [offs],
             (error, results, fields) => {
                 if (error) {
