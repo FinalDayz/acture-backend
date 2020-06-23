@@ -40,7 +40,11 @@ module.exports = {
             `DELETE FROM Followed_people 
                 WHERE userId = ? AND followedUser = ?`,
             [thisUserId, theirUserId],
-            standardResponse.bind(this, callback)
+            (error, results, fields) => {
+                if (error) {
+                    return callback(error)
+                }
+            standardResponse.bind(this, callback)}
         );
     },
 
@@ -50,7 +54,11 @@ module.exports = {
                     (userId, followedUser) VALUES 
                     (?, ?)`,
             [thisUserId, theirUserId],
-            standardResponse.bind(this, callback)
+            (error, results, fields) => {
+                if (error) {
+                    return callback(error)
+                }
+            standardResponse.bind(this, callback)}
         );
     },
 };
