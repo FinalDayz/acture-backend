@@ -43,6 +43,16 @@ module.exports = {
         );
     },
 
+    getStartupById: (startupId, callback) => {
+        pool.query(
+            `SELECT startupId, name, telephone, email, TO_BASE64(image) as image, description, website, ownerId
+                FROM Startup
+                WHERE startupId = ?`,
+            [startupId],
+            standardResponse.bind(this, callback)
+        );
+    },
+
     deleteFollow: (thisUserId, theirStartupId, callback) => {
         pool.query(
             `DELETE FROM Followed_startups
@@ -111,5 +121,23 @@ module.exports = {
                 return callback(null, results[0]);
             }
         )
-    }
+    },
+
+    getStartupPosts: (startupId, callback) => {
+        pool.query(
+            `SELECT p.postId, p.text, p.categoryId, TO_BASE64(p.image) as image, 
+            p.userId, p.categoryId, p.title, p.startup, p.postDate, c.name AS categoryname,
+            s.name AS startupName, TO_BASE64(s.image) AS startupImage 
+                FROM Post p
+                LEFT JOIN Category c
+                    ON p.categoryId = c.categoryId
+                 LEFT JOIN Startup s 
+                    ON p.startup = s.startupId
+                WHERE p.startup = ?
+                ORDER BY p.postDate DESC
+                LIMIT 15`,
+            [startupId],
+            standardResponse.bind(this, callback)
+        );
+    },
 };
