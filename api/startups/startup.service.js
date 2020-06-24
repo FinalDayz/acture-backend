@@ -70,7 +70,8 @@ module.exports = {
             FROM Startup s
                 LEFT JOIN Followed_startups f
                 ON f.userId = ?
-                AND f.startupId = s.startupId`,
+                AND f.startupId = s.startupId
+            ORDER BY s.name ASC`,
             [userId],
             standardResponse.bind(this, callback)
         );
