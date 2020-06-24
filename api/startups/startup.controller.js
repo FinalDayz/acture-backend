@@ -1,4 +1,4 @@
-const {addFollow, deleteFollow, fetchAll, workingForfetchAll, insertStartup, leaveStartup} = require("./startup.service");
+const {addFollow, deleteFollow, fetchAll, workingForfetchAll, getStartupList, insertStartup, leaveStartup} = require("./startup.service");
 const {getUserIdFromToken} = require("../../auth/token_validation");
 
 const {} = require("./startup.service");
@@ -57,6 +57,12 @@ module.exports = {
                 message: "inserted into database"
             });
         });
+    },
+
+    getStartupList: (req, res) => {
+        const thisUserId = getUserIdFromToken(req.get("authorization"));
+        getStartupList(thisUserId, responseFunc.bind(this, res));
+
     },
 
     leaveStartup: (req, res) => {

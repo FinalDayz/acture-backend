@@ -62,6 +62,19 @@ module.exports = {
         );
     },
 
+    getStartupList: (userId, callback) => {
+        pool.query(
+            `SELECT DISTINCT s.startupId, s.name, s.telephone, 
+            s.email, TO_BASE64(s.image), s.description, s.website, s.ownerId,
+            (f.userId is not null) isFollowingThem 
+            FROM Startup s
+                LEFT JOIN Followed_startups f
+                ON f.userId = ?
+                AND f.startupId = s.startupId`,
+            [userId],
+            standardResponse.bind(this, callback)
+        );
+    },
     insertStartup: (data, userId, callback) => {
         pool.query(
             `CALL add_new_startup(?, ?, ?, ?, ?, ?, ?)`,
