@@ -1,7 +1,28 @@
-const { getFeedSP, getGlobalFeedSP, getEventsSP, getGuidesSP, getOnlyNews, verifyPoster, deleteFeedPost, getPersonalBlogs } = require("./feedpost.service");
+const { getUserPosts, getFeedSP, getGlobalFeedSP, getEventsSP, getGuidesSP, getBlogsSP, getOnlyNews, verifyPoster, deleteFeedPost, getPersonalBlogs } = require("./feedpost.service");
 const { getRoleFromToken, getUserIdFromToken } = require("../../auth/token_validation");
 
 module.exports = {
+
+    getUserPosts: (req, res) => {
+        const id = req.params.id;
+        const offs = req.params.offs;
+        getUserPosts(id, offs, (err, results) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            if (!results) {
+                return res.json({
+                    success: 0,
+                    message: "Record not found"
+                });
+            }
+            return res.json({
+                success: 1,
+                data: results
+            });
+        });
+    },
     getFeedPosts: (req, res) => {
         const id = getUserIdFromToken(req.get("authorization"));
         const offs = req.body.offs;
@@ -191,6 +212,26 @@ module.exports = {
     getGuidesSP: (req, res) => {
         const offs = req.body.offs;
         getGuidesSP(offs, (err, results) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            if (!results) {
+                return res.json({
+                    success: 0,
+                    message: "Record not found"
+                });
+            }
+            return res.json({
+                success: 1,
+                data: results
+            });
+        });
+    },
+
+    getBlogsSP: (req, res) => {
+        const offs = req.body.offs;
+        getBlogsSP(offs, (err, results) => {
             if (err) {
                 console.log(err);
                 return;

@@ -28,7 +28,8 @@ module.exports = {
                 LEFT JOIN Privacy pr ON pr.userId = a.userId 
                WHERE a.userId <> ? 
                AND a.activated = 1 
-               AND a.role <> "user"`,
+               AND a.role <> "user"
+               ORDER BY a.firstname ASC`,
             [userId, userId],
             standardResponse.bind(this, callback)
         );
@@ -39,7 +40,11 @@ module.exports = {
             `DELETE FROM Followed_people 
                 WHERE userId = ? AND followedUser = ?`,
             [thisUserId, theirUserId],
-            standardResponse.bind(this, callback)
+            (error, results, fields) => {
+                if (error) {
+                    return callback(error)
+                }
+            standardResponse.bind(this, callback)}
         );
     },
 
@@ -49,7 +54,11 @@ module.exports = {
                     (userId, followedUser) VALUES 
                     (?, ?)`,
             [thisUserId, theirUserId],
-            standardResponse.bind(this, callback)
+            (error, results, fields) => {
+                if (error) {
+                    return callback(error)
+                }
+            standardResponse.bind(this, callback)}
         );
     },
 };
