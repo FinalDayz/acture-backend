@@ -28,7 +28,7 @@ module.exports = {
                 data.lastname,
                 data.register_date,
                 data.password,
-                data.role,
+                "user",
                 data.email,
             ],
             (error, results, fields) => {
