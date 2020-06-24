@@ -5,7 +5,7 @@ const router = require("express").Router();
 
 const { checkToken } = require("../../auth/token_validation");
 
-router.get("/getUserPosts/:id/:offs", checkToken, checkRole('member'), getUserPosts);
+router.get("/getUserPosts/:id/:offs", checkToken, getUserPosts);
 router.post("/feed", getFeedPosts);//TODO: checkToken toevoegen als het klaar is
 router.post("/globalFeed", getGlobalFeedPosts);
 router.post("/events", getEventsSP);

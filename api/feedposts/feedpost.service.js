@@ -112,7 +112,7 @@ module.exports = {
                 if (error) {
                     return callback(error);
                 }
-                return callback(null, results);
+                return callback(null, results[0]);
             }
         )
     },
