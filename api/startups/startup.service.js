@@ -120,18 +120,21 @@ module.exports = {
                 return callback(null, results[0]);
             }
         )
-    }
+    },
 
     getStartupPosts: (startupId, callback) => {
         pool.query(
-            `SELECT p.postId, p.text, TO_BASE64(p.image) as image, p.userId, p.categoryId, p.title, p.startup,
-            a.firstname, a.lastname, a.tussenvoegsel, TO_BASE64(a.image) AS profileImage, c.name AS categoryname
+            `SELECT p.postId, p.text, p.categoryId, TO_BASE64(p.image) as image, 
+            p.userId, p.categoryId, p.title, p.startup, p.postDate, c.name AS categoryname,
+            s.name AS startupName, TO_BASE64(s.image) AS startupImage 
                 FROM Post p
-                LEFT JOIN Account a
-                    ON p.userId = a.userId
                 LEFT JOIN Category c
                     ON p.categoryId = c.categoryId
-                WHERE p.startup = ?`,
+                 LEFT JOIN Startup s 
+                    ON p.startup = s.startupId
+                WHERE p.startup = ?
+                ORDER BY p.postDate DESC
+                LIMIT 15`,
             [startupId],
             standardResponse.bind(this, callback)
         );
