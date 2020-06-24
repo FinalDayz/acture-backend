@@ -43,6 +43,16 @@ module.exports = {
         );
     },
 
+    getStartupById: (startupId, callback) => {
+        pool.query(
+            `SELECT startupId, name, telephone, email, TO_BASE64(image) as image, description, website, ownerId
+                FROM Startup
+                WHERE startupId = ?`,
+            [startupId],
+            standardResponse.bind(this, callback)
+        );
+    },
+
     deleteFollow: (thisUserId, theirStartupId, callback) => {
         console.log("delete: " + thisUserId, theirStartupId)
         pool.query(
@@ -54,12 +64,26 @@ module.exports = {
     },
 
     addFollow: (thisUserId, theirStartupId, callback) => {
-        console.log("added: " + thisUserId, theirStartupId)
         pool.query(
             `INSERT INTO Followed_startups
                     (userId, startupId) VALUES 
                     (?, ?)`,
             [thisUserId, theirStartupId],
+            standardResponse.bind(this, callback)
+        );
+    },
+
+    getStartupPosts: (startupId, callback) => {
+        pool.query(
+            `SELECT p.postId, p.text, TO_BASE64(p.image) as image, p.userId, p.categoryId, p.title, p.startup,
+            a.firstname, a.lastname, a.tussenvoegsel, TO_BASE64(a.image) AS profileImage, c.name AS categoryname
+                FROM Post p
+                LEFT JOIN Account a
+                    ON p.userId = a.userId
+                LEFT JOIN Category c
+                    ON p.categoryId = c.categoryId
+                WHERE p.startup = ?`,
+            [startupId],
             standardResponse.bind(this, callback)
         );
     },
