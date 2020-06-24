@@ -3,6 +3,21 @@ const {removePrivacyFields} = require("../privacy/privacy.service");
 
 module.exports = {
 
+    getUserPosts: (id, offs, callback) => {
+        pool.query(
+            'CALL get_user_feed(?, ?)',
+            [id, offs],
+            (error, results, fields) => {
+                if (error) {
+                    return callback(error)
+                }
+                results = removePrivacyFields(results);
+                return callback(null, results[0]);
+            }
+        )
+
+    },
+
     //Requires stored procedure: get_feed
     getFeedSP: (id, offs, callback) => {
         pool.query(

@@ -1,15 +1,29 @@
+const {uploadUserImage} = require("./user.service");
 const {setUserActive} = require("./user.service");
-const { create, getUserById, getUsers, saveSettings, getUserDetails, updateUser, deleteUser, getUserByEmail, fetchInOrActiveUsers, updateRole, updatePassword } = require("./user.service");
+const {create, getUserById, getUsers, saveSettings, getUserDetails, updateUser, deleteUser, getUserByEmail, fetchInOrActiveUsers, updateRole, updatePassword} = require("./user.service");
 
 const {getUserIdFromToken} = require("../../auth/token_validation");
-const { genSaltSync, hashSync, compareSync} = require("bcrypt");
+const {genSaltSync, hashSync, compareSync} = require("bcrypt");
 
-const { sign } = require("jsonwebtoken");
+const {sign} = require("jsonwebtoken");
 
 module.exports = {
+    uploadImage: (req, res) => {
+        const image = req.body.imageBase64;
+        const id = getUserIdFromToken(req.get("authorization"));
+
+        uploadUserImage(id, image, (err, results) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            return res.json({
+                success: 1
+            });
+        });
+    },
     createUser: (req, res) => {
         const body = req.body;
-
 
         getUserByEmail(body.email, (err, results) => {
             if (err) {
@@ -31,7 +45,8 @@ module.exports = {
                         data: results
                     })
                 });
-            } if (results){
+            }
+            if (results) {
                 return res.json({
                     success: 0,
                     data: "this email is already in use"
@@ -191,14 +206,14 @@ module.exports = {
                 });
             }
             let result = false;
-            if(body.password.length != 0 && body.email.length != 0) {
+            if (body.password.length != 0 && body.email.length != 0) {
                 result = compareSync(body.password, results.password);
             } else result = false;
             if (result) {
                 results.password = undefined; // Don't send passwords unnecessarily
                 let userWithoutImage = {...results};
                 userWithoutImage.image = null;
-                const jsontoken = sign({ result: userWithoutImage }, process.env.JWT_KEY, {
+                const jsontoken = sign({result: userWithoutImage}, process.env.JWT_KEY, {
                     expiresIn: "1h"
                 });
                 return res.json({
@@ -207,8 +222,7 @@ module.exports = {
                     token: jsontoken,
                     user: results,
                 });
-            }
-            else {
+            } else {
                 return res.json({
                     success: 0,
                     data: "Invalid email or password"
@@ -252,13 +266,12 @@ module.exports = {
                 });
             }
             let result = false;
-            if(body.password.length != 0 && body.email.length != 0) {
+            if (body.password.length != 0 && body.email.length != 0) {
                 result = compareSync(body.password, results.password);
             } else result = false;
             if (result) {
                 next();
-            }
-            else {
+            } else {
                 res.json({
                     success: 0,
                     data: "Invalid email or password"
@@ -267,7 +280,7 @@ module.exports = {
         });
     },
 
-    getUserDetails: (req, res) =>{
+    getUserDetails: (req, res) => {
         const id = getUserIdFromToken(req.get("authorization"));
         getUserDetails(id, (err, results) => {
             if (err) {
@@ -286,7 +299,7 @@ module.exports = {
         });
     },
 
-    updateUserDetails: (req, res) =>{
+    updateUserDetails: (req, res) => {
         const thisUserId = getUserIdFromToken(req.get("authorization"));
 
         const body = req.body;
