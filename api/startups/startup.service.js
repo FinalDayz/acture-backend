@@ -54,7 +54,6 @@ module.exports = {
     },
 
     deleteFollow: (thisUserId, theirStartupId, callback) => {
-        console.log("delete: " + thisUserId, theirStartupId)
         pool.query(
             `DELETE FROM Followed_startups
                 WHERE userId = ? AND startupId = ?`,
@@ -72,6 +71,56 @@ module.exports = {
             standardResponse.bind(this, callback)
         );
     },
+
+    getStartupList: (userId, callback) => {
+        pool.query(
+            `SELECT DISTINCT s.startupId, s.name, s.telephone, 
+            s.email, TO_BASE64(s.image) AS image, s.description, s.website, s.ownerId,
+            (f.userId is not null) isFollowingThem 
+            FROM Startup s
+                LEFT JOIN Followed_startups f
+                ON f.userId = ?
+                AND f.startupId = s.startupId`,
+            [userId],
+            standardResponse.bind(this, callback)
+        );
+    },
+    insertStartup: (data, userId, callback) => {
+        pool.query(
+            `CALL add_new_startup(?, ?, ?, ?, ?, ?, ?)`,
+            [
+                data.startupName,
+                data.startupDescription,
+                data.startupPhone,
+                data.startupMail,
+                data.startupSite,
+                data.startupImage,
+                userId
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    return callback(error);
+                }
+                return callback(null, results[0]);
+            }
+        )
+    },
+
+    leaveStartup: (startupId, userId, callback) => {
+        pool.query(
+            `DELETE FROM Startup_user WHERE startupId = ? AND userId = ?`,
+            [
+                startupId,
+                userId
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    return callback(error);
+                }
+                return callback(null, results[0]);
+            }
+        )
+    }
 
     getStartupPosts: (startupId, callback) => {
         pool.query(
