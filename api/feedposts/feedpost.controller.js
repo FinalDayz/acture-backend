@@ -124,14 +124,14 @@ module.exports = {
                 return;
             }
             if (!results) {
-                res.json({
+                return res.json({
                     success: 0,
                     message: "Record not found"
                 });
             }
             if (results) {
                 if (results.results === 0) {
-                    res.json({
+                    return res.json({
                         success: 0,
                         message: "Access denied: unauthorized user"
                     });
@@ -248,7 +248,7 @@ module.exports = {
             });
         });
     },
-    
+
     getPersonalBlogs: (req, res) => {
         getPersonalBlogs(req.body.userId, (err, results) => {
             if (err) {

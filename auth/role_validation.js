@@ -13,7 +13,7 @@ module.exports = {
             let userRole = getRoleFromToken(req.get("authorization"));
 
             if (roles[userRole] < roles[role]) {
-                res.json({
+                return res.json({
                     success: 0,
                     message: "Access denied: unauthorized user"
                 });

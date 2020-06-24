@@ -8,10 +8,10 @@ module.exports = {
             token = token.slice(7); // remove 'bearer: ' from token
             verify(token, process.env.JWT_KEY, (err, decoded) => {
                 if (err) {
-                    res.json({
+                    return res.json({
                         success: 0,
                         message: "Invalid token"
-                    })
+                    });
                 }
                 else {
                     next();
