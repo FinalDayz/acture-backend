@@ -178,7 +178,7 @@ module.exports = {
 
     getUserDetails: (id, callback) => {
         pool.query(
-            `select firstname, lastname, tussenvoegsel, description from Account where userId = ?`,
+            `select firstname, lastname, tussenvoegsel, address, telephone, description from Account where userId = ?`,
             [id],
             (error, results, fields) => {
                 if (error) {
@@ -191,11 +191,13 @@ module.exports = {
 
     saveSettings: (data, id, callback) => {
         pool.query(
-            'update Account set firstname=?, tussenvoegsel=?, lastname=?, description=? where userId = ?',
+            'update Account set firstname=?, tussenvoegsel=?, lastname=?, address=?, telephone=?, description=? where userId = ?',
             [
                 data.firstname,
                 data.tussenvoegsel,
                 data.lastname,
+                data.address,
+                data.telephone,
                 data.description,
                 id
             ],
