@@ -3,6 +3,21 @@ const {removePrivacyFields} = require("../privacy/privacy.service");
 
 
 module.exports = {
+    uploadUserImage: (userId, image, callback) => {
+        pool.query(
+            `UPDATE Account
+                SET image = FROM_BASE64(?)
+                WHERE userId = ?`,
+            [
+                image, userId
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    return callback(error);
+                }
+                return callback(null, results);
+            })
+    },
     create: (data, callback) => {
         pool.query(
             `insert into Account(firstname, tussenvoegsel, lastname, register_date, password, role, email)
@@ -79,7 +94,7 @@ module.exports = {
 
     getUserById: (id, callback) => {
         pool.query(
-            `select a.userId, a.firstname, a.lastname, a.role, a.tussenvoegsel, a.email, TO_BASE64(a.image) image, a.telephone, a.description,
+            `select a.userId, a.firstname, a.lastname, a.role, a.tussenvoegsel, a.email, TO_BASE64(a.image) image, a.telephone, a.description, a.address,
              pr.address as privacyAddress, pr.email as privacyEmail, pr.telephone as privacyTelephone
             from Account a
             LEFT JOIN Privacy pr ON pr.userId = a.userId
