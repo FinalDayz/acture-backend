@@ -79,12 +79,17 @@ module.exports = {
 
     getUserById: (id, callback) => {
         pool.query(
-            `select userId, firstname, lastname, role, tussenvoegsel, email, TO_BASE64(image) image, telephone, description from Account where userId = ?`,
+            `select a.userId, a.firstname, a.lastname, a.role, a.tussenvoegsel, a.email, TO_BASE64(a.image) image, a.telephone, a.description,
+             pr.address as privacyAddress, pr.email as privacyEmail, pr.telephone as privacyTelephone
+            from Account a
+            LEFT JOIN Privacy pr ON pr.userId = a.userId
+            where a.userId = ?`,
             [id],
             (error, results, fields) => {
                 if (error) {
                     return callback(error);
                 }
+                results = removePrivacyFields(results);
                 return callback(null, results[0]);
             }
         )

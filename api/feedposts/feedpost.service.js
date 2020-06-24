@@ -3,6 +3,21 @@ const {removePrivacyFields} = require("../privacy/privacy.service");
 
 module.exports = {
 
+    getUserPosts: (id, offs, callback) => {
+        pool.query(
+            'CALL get_user_feed(?, ?)',
+            [id, offs],
+            (error, results, fields) => {
+                if (error) {
+                    return callback(error)
+                }
+                results = removePrivacyFields(results);
+                return callback(null, results[0]);
+            }
+        )
+
+    },
+
     //Requires stored procedure: get_feed
     getFeedSP: (id, offs, callback) => {
         pool.query(
@@ -46,6 +61,7 @@ module.exports = {
         )
     },
 
+    //Requires stored procedure: get_attendance
     getAttendanceSP: (id, callback) => {
         pool.query(
             'CALL get_attendance(?)',
@@ -59,9 +75,24 @@ module.exports = {
         )
     },
 
+    //Requires stored procedure: get_guides
     getGuidesSP: (offs, callback) => {
         pool.query(
             'CALL get_guides(?)',
+            [offs],
+            (error, results, fields) => {
+                if (error) {
+                    return callback(error)
+                }
+                return callback(null, results[0]);
+            }            
+        )
+    },
+
+    //Requires stored procedure: get_blogs
+    getBlogsSP: (offs, callback) => {
+        pool.query(
+            'CALL get_blogs(?)',
             [offs],
             (error, results, fields) => {
                 if (error) {
