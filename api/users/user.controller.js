@@ -122,7 +122,9 @@ module.exports = {
         getUserById(id, (err, results) => {
             if (err) {
                 console.log(err);
-                return;
+                return res.json({
+                    success: 0
+                });
             }
             if (!results) {
                 return res.json({
