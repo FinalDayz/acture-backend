@@ -60,4 +60,31 @@ module.exports = {
             standardResponse.bind(this, callback)}
         );
     },
+
+    startupDeleteFollow: (thisUserId, startupId, callback) => {
+        pool.query(
+            `DELETE FROM Followed_startups 
+                WHERE userId = ? AND startupId = ?`,
+            [thisUserId, startupId],
+            (error, results, fields) => {
+                if (error) {
+                    return callback(error)
+                }
+            standardResponse.bind(this, callback)}
+        );
+    },
+
+    startupAddFollow: (thisUserId, startupId, callback) => {
+        pool.query(
+            `INSERT INTO Followed_startups
+                    (userId, startupId) VALUES 
+                    (?, ?)`,
+            [thisUserId, startupId],
+            (error, results, fields) => {
+                if (error) {
+                    return callback(error)
+                }
+            standardResponse.bind(this, callback)}
+        );
+    },
 };

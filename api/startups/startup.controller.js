@@ -1,7 +1,7 @@
 const {addFollow} = require("./startup.service");
 const {deleteFollow} = require("./startup.service");
 const {getUserIdFromToken} = require("../../auth/token_validation");
-const {fetchAll, workingForfetchAll} = require("./startup.service");
+const {fetchAll, workingForfetchAll, getStartupList} = require("./startup.service");
 
 const {} = require("./startup.service");
 
@@ -39,6 +39,13 @@ module.exports = {
         } else if(follow == 0) {
             deleteFollow(thisUserId, theirStartupId, responseFunc.bind(this, res));
         }
+
+    },
+
+    getStartupList: (req, res) => {
+        console.log("Ik wordt aangeroepen")
+        const thisUserId = getUserIdFromToken(req.get("authorization"));
+        getStartupList(thisUserId, responseFunc.bind(this, res));
 
     },
 };

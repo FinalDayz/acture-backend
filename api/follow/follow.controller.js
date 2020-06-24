@@ -1,5 +1,5 @@
-const {addFollow} = require("./follow.service");
-const {deleteFollow} = require("./follow.service");
+const {addFollow, startupAddFollow} = require("./follow.service");
+const {deleteFollow, startupDeleteFollow} = require("./follow.service");
 const {getUserIdFromToken} = require("../../auth/token_validation");
 const {fetchAll} = require("./follow.service");
 
@@ -34,6 +34,19 @@ module.exports = {
             addFollow(thisUserId, theirUserId, responseFunc.bind(this, res));
         } else if(follow == 0) {
             deleteFollow(thisUserId, theirUserId, responseFunc.bind(this, res));
+        }
+
+    },
+
+    startupFollowOrNot: (req, res) => {
+        const thisUserId = getUserIdFromToken(req.get("authorization"));
+        const follow = req.params.followOrNot;
+        const startupId = req.params.id;
+
+        if(follow == 1) {
+            startupAddFollow(thisUserId, startupId, responseFunc.bind(this, res));
+        } else if(follow == 0) {
+            startupDeleteFollow(thisUserId, startupId, responseFunc.bind(this, res));
         }
 
     },
