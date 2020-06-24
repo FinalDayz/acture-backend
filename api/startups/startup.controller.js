@@ -1,4 +1,4 @@
-const {addFollow, deleteFollow, fetchAll, workingForfetchAll, insertStartup} = require("./startup.service");
+const {addFollow, deleteFollow, fetchAll, workingForfetchAll, insertStartup, leaveStartup} = require("./startup.service");
 const {getUserIdFromToken} = require("../../auth/token_validation");
 
 const {} = require("./startup.service");
@@ -45,6 +45,25 @@ module.exports = {
 
 
         insertStartup(data, userId,(err, results) => {
+            if (err) {
+                console.log(err);
+                return res.json({
+                    success: 0,
+                    message: "Database connection error"
+                });
+            }
+            return res.json({
+                success: 1,
+                message: "inserted into database"
+            });
+        });
+    },
+
+    leaveStartup: (req, res) => {
+        const userId = getUserIdFromToken(req.get("authorization"));
+        const starupId = req.body.startupId;
+
+        leaveStartup(starupId, userId,(err, results) => {
             if (err) {
                 console.log(err);
                 return res.json({

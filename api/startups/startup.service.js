@@ -81,5 +81,21 @@ module.exports = {
                 return callback(null, results[0]);
             }
         )
+    },
+
+    leaveStartup: (startupId, userId, callback) => {
+        pool.query(
+            `DELETE FROM Startup_user WHERE startupId = ? AND userId = ?`,
+            [
+                startupId,
+                userId
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    return callback(error);
+                }
+                return callback(null, results[0]);
+            }
+        )
     }
 };
