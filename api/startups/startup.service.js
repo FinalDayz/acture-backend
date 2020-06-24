@@ -10,7 +10,7 @@ const standardResponse = (callback, error, results, fields) => {
 module.exports = {
     fetchAll: (userId, filter, callback) => {
         pool.query(
-            `SELECT DISTINCT startupId, name, image, email, 
+            `SELECT DISTINCT startupId, name, TO_BASE64(image) AS image, email, 
                     IF(startupId IN (
                         SELECT startupId 
                         FROM Followed_startups 
