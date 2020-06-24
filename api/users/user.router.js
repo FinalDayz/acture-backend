@@ -7,10 +7,11 @@ const { checkRole } = require("../../auth/role_validation");
 
 router.post("/", checkToken, createUser);
 router.get("/", checkToken, getUsers);
-router.get("/byid/:id", checkToken, checkRole('user'), getUserById);
+router.get("/byid/:id", checkToken, getUserById);
 router.patch("/", checkToken, updateUsers);
 router.delete("/:id", checkToken, deleteUser);
 router.patch("/uploadImage", checkToken, checkRole('member'), uploadImage);
+
 
 router.get("/active/:active", checkToken, checkRole('admin'), getInOrActiveUsers);
 

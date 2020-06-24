@@ -8,5 +8,4 @@ const { checkRole } = require("../../auth/role_validation");
 router.get("/", checkToken, getPrivacySettings);
 router.post("/", checkToken, checkRole('member'), changePrivacySettings);
 
-
 module.exports = router;

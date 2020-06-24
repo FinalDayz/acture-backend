@@ -102,6 +102,8 @@ module.exports = {
             [id],
             (error, results, fields) => {
                 if (error) {
+                    console.log(results);
+                    console.log(error);
                     return callback(error);
                 }
                 results = removePrivacyFields(results);
