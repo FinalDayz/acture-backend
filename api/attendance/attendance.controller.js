@@ -25,7 +25,6 @@ module.exports = {
             });
         });
         insertTotalPeople(eventId,(err,results)=>{
-            console.log("total people reached")
             if (err) {
                 console.log(err);
                 return res.json({

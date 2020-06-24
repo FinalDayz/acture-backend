@@ -119,7 +119,6 @@ module.exports = {
                 if (error) {
                     return callback(error);
                 }
-                // console.log(results[0].categoryId)
                 return callback(null, results);
             }
         )

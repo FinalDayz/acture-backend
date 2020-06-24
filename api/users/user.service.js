@@ -40,12 +40,8 @@ module.exports = {
     },
 
     setUserActive: (id, callback) => {
-        console.log(`UPDATE Account
-        SET activated = 1 
-        WHERE userId = ?`,
-            [id]);
         pool.query(`UPDATE Account
-        SET activated = 1 
+        SET activated = 1, role = 'member'
         WHERE userId = ?`,
             [id],
             (error, results, fields) => {

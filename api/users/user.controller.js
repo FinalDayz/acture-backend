@@ -58,7 +58,7 @@ module.exports = {
     resetPassword: (req, res) => {
         const body = req.body;
         const salt = genSaltSync(10);
-        console.log(body.newpassword + " " + body.email)
+
         body.newpassword = hashSync(body.newpassword, salt);
         updatePassword(body, (err, results) => {
             if (err) {
