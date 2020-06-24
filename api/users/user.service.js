@@ -61,9 +61,10 @@ module.exports = {
             `SELECT
             userId, firstname, tussenvoegsel, register_date, lastname,
             TO_BASE64(image) image, register_date, role, email, activated
-            FROM Account ` + (active ?
-                `WHERE activated = 1` :
-                `WHERE activated <> 1 OR activated IS NULL`),
+            FROM Account WHERE (` + (active ?
+                `activated = 1` :
+                `activated <> 1 OR activated IS NULL`) +
+               `) AND email <> '' AND email IS NOT NULL`,
             [],
             (error, results, fields) => {
                 if (error) {
