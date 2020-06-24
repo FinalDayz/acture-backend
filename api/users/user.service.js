@@ -3,6 +3,21 @@ const {removePrivacyFields} = require("../privacy/privacy.service");
 
 
 module.exports = {
+    uploadUserImage: (userId, image, callback) => {
+        pool.query(
+            `UPDATE Account
+                SET image = FROM_BASE64(?)
+                WHERE userId = ?`,
+            [
+                image, userId
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    return callback(error);
+                }
+                return callback(null, results);
+            })
+    },
     create: (data, callback) => {
         pool.query(
             `insert into Account(firstname, tussenvoegsel, lastname, register_date, password, role, email)
@@ -13,7 +28,7 @@ module.exports = {
                 data.lastname,
                 data.register_date,
                 data.password,
-                data.role,
+                "user",
                 data.email,
             ],
             (error, results, fields) => {
@@ -79,12 +94,17 @@ module.exports = {
 
     getUserById: (id, callback) => {
         pool.query(
-            `select userId, firstname, lastname, role, tussenvoegsel, email, TO_BASE64(image) image, telephone, description from Account where userId = ?`,
+            `select a.userId, a.firstname, a.lastname, a.role, a.tussenvoegsel, a.email, TO_BASE64(a.image) image, a.telephone, a.description, a.address,
+             pr.address as privacyAddress, pr.email as privacyEmail, pr.telephone as privacyTelephone
+            from Account a
+            LEFT JOIN Privacy pr ON pr.userId = a.userId
+            where a.userId = ?`,
             [id],
             (error, results, fields) => {
                 if (error) {
                     return callback(error);
                 }
+                results = removePrivacyFields(results);
                 return callback(null, results[0]);
             }
         )
@@ -173,7 +193,7 @@ module.exports = {
 
     getUserDetails: (id, callback) => {
         pool.query(
-            `select firstname, lastname, tussenvoegsel, description from Account where userId = ?`,
+            `select firstname, lastname, tussenvoegsel, address, telephone, description from Account where userId = ?`,
             [id],
             (error, results, fields) => {
                 if (error) {
@@ -186,11 +206,13 @@ module.exports = {
 
     saveSettings: (data, id, callback) => {
         pool.query(
-            'update Account set firstname=?, tussenvoegsel=?, lastname=?, description=? where userId = ?',
+            'update Account set firstname=?, tussenvoegsel=?, lastname=?, address=?, telephone=?, description=? where userId = ?',
             [
                 data.firstname,
                 data.tussenvoegsel,
                 data.lastname,
+                data.address,
+                data.telephone,
                 data.description,
                 id
             ],
