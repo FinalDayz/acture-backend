@@ -44,7 +44,9 @@ module.exports = {
                 if (error) {
                     return callback(error)
                 }
-            standardResponse.bind(this, callback)}
+                return callback(null, results);
+            // standardResponse.bind(this, callback);
+            }
         );
     },
 
@@ -58,7 +60,8 @@ module.exports = {
                 if (error) {
                     return callback(error)
                 }
-            standardResponse.bind(this, callback)}
+                return callback(null, results);
+            }
         );
     },
 
