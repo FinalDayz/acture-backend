@@ -74,7 +74,8 @@ module.exports = {
                 if (error) {
                     return callback(error)
                 }
-            standardResponse.bind(this, callback)}
+                return callback(null, results);
+            }
         );
     },
 
@@ -88,7 +89,8 @@ module.exports = {
                 if (error) {
                     return callback(error)
                 }
-            standardResponse.bind(this, callback)}
+                return callback(null, results);
+            }
         );
     },
 };
