@@ -22,6 +22,7 @@ const attendanceRouter = require("./api/attendance/attendance.router");
 const followRouter = require("./api/follow/follor.router");
 const startupRouter = require("./api/startups/startup.router");
 const privacyRouter = require("./api/privacy/privacy.router");
+const partnersRouter = require("./api/partners/partners.router");
 
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
@@ -66,6 +67,7 @@ app.use("/api/attendance", attendanceRouter);
 app.use("/api/follow", followRouter);
 app.use("/api/privacy", privacyRouter);
 app.use("/api/startup", startupRouter);
+app.use("/api/partners", partnersRouter);
 
 
 app.listen(process.env.APP_PORT, () => {
